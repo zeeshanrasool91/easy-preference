@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -71,6 +72,12 @@ public class EasyPreference {
             return this;
         }
 
+        public Builder addList(String key, Object value) {
+            Gson gson = new Gson();
+            editor.putString(key, gson.toJson(value));
+            return this;
+        }
+
         public Builder save() {
             editor.commit();
             return this;
@@ -104,6 +111,14 @@ public class EasyPreference {
             if (preferences.contains(key)) {
                 Gson gson = new Gson();
                 return gson.fromJson(preferences.getString(key, ""), classType);
+            }
+            return null;
+        }
+
+        public <GenericClass> List<GenericClass> getList(String key, Class<GenericClass> classType) {
+            if (preferences.contains(key)) {
+                Gson gson = new Gson();
+                return gson.fromJson(preferences.getString(key, ""), new ListOf<>(classType));
             }
             return null;
         }

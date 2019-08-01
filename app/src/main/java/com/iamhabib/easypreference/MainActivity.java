@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import com.iamhabib.easy_preference.EasyPreference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,46 +17,62 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MyObject object=new MyObject(409, "Habibur Rahman");
+        MyObject object = new MyObject(409, "Habibur Rahman");
 
-        final TextView value=(TextView)findViewById(R.id.value);
+        List<MyObject> myObjectList = new ArrayList<>();
+        myObjectList.add(object);
 
-        if(EasyPreference.with(MainActivity.this).getBoolean("B",false)){
-            value.setText("B: TRUE, "+EasyPreference.with(MainActivity.this).getString("S","")+" "+EasyPreference.with(MainActivity.this).getString("SS",""));
-        }else{
-            value.setText("B: FALSE, "+EasyPreference.with(MainActivity.this).getString("S","")+" "+EasyPreference.with(MainActivity.this).getString("SS",""));
+
+        final TextView value = (TextView) findViewById(R.id.value);
+
+        if (EasyPreference.with(MainActivity.this).getBoolean("B", false)) {
+            value.setText("B: TRUE, " + EasyPreference.with(MainActivity.this).getString("S", "") + " " + EasyPreference.with(MainActivity.this).getString("SS", ""));
+        } else {
+            value.setText("B: FALSE, " + EasyPreference.with(MainActivity.this).getString("S", "") + " " + EasyPreference.with(MainActivity.this).getString("SS", ""));
         }
 
         EasyPreference
                 .with(MainActivity.this)
                 .addBoolean("B", true)
-                .addString("S","HABIBUR")
+                .addString("S", "HABIBUR")
                 .addString("SS", "RAHMAN")
                 .addObject("O", object)
+                .addList("List", myObjectList)
                 .save();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(EasyPreference.with(MainActivity.this).getBoolean("B",false)){
-                    value.setText("B: TRUE, "+EasyPreference.with(MainActivity.this).getString("S","")+" "+EasyPreference.with(MainActivity.this).getString("SS",""));
-                }else{
-                    value.setText("B: FALSE, "+EasyPreference.with(MainActivity.this).getString("S","")+" "+EasyPreference.with(MainActivity.this).getString("SS",""));
+                if (EasyPreference.with(MainActivity.this).getBoolean("B", false)) {
+                    value.setText("B: TRUE, " + EasyPreference.with(MainActivity.this).getString("S", "") + " " + EasyPreference.with(MainActivity.this).getString("SS", ""));
+                } else {
+                    value.setText("B: FALSE, " + EasyPreference.with(MainActivity.this).getString("S", "") + " " + EasyPreference.with(MainActivity.this).getString("SS", ""));
                 }
             }
-        },20000);
+        }, 20000);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                MyObject object1=EasyPreference.with(MainActivity.this)
+                MyObject object1 = EasyPreference.with(MainActivity.this)
                         .getObject("O", MyObject.class);
-                value.setText(object1.getId()+" "+object1.getName());
+                value.setText(object1.getId() + " " + object1.getName());
             }
-        },40000);
+        }, 40000);
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                List<MyObject> objectList = EasyPreference.with(MainActivity.this).getList("List", MyObject.class);
+                for (MyObject object : objectList) {
+                    value.setText("FromList " + object.getId() + " " + object.getName());
+                }
+            }
+        }, 40000);
     }
 
-    public class MyObject{
+    public class MyObject {
         private int id;
         private String name;
 
