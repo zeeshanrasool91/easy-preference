@@ -37,6 +37,9 @@ EasyPreference.with(this, "YourPrefName")
 ### Adding Value ###
 You can add boolean, int, String, long, Set<String>, float 
 and another is data object.
+create list of Custom Objects
+List<MyObject> myObjectList = new ArrayList<>();
+myObjectList.add(object);
 
 ```groovy
 EasyPreference.with(this)
@@ -44,6 +47,7 @@ EasyPreference.with(this)
                 .addString("KEY", stringValue)
                 .addInt("KEY", intValue)
                 .addObject("KEY", objectValue)
+                .addList("List", myObjectList)//This line for adding ArrayList in Preferences
                 .save();
 ```
 
@@ -57,6 +61,11 @@ boolean value=EasyPreference.with(this)
 ```groovy
 MyObject object=EasyPreference.with(this)
                         .getObject("KEY", MyObject.class);
+```
+
+### Geting List Object ###
+```groovy
+List<MyObject> objectList = EasyPreference.with(MainActivity.this).getList("KEY", MyObject.class);
 ```
 
 ### Removing Value ###
